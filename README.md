@@ -1,49 +1,78 @@
 # Innoscripta News App
 
+This is a react application and uses 3 endpoints for news aggregations. To keep the bundle size and docker image size to minimal, no UI components libaries are used but tailwind-css is used for styling which is a development dependency. Vite is used for bundling and docker for containerization.
+
+## Thought behind things
+
+- The header "News of the Day" is the news with the longest description
+- Preferences are respected everytime but some combinations may result in zero results, in that case, Please tickle around with filters and preferences.
+- Placeholder Images are displayed if the image url is null or empty
+- Duplicate News will be visible since multiple sources can contains that same news
+- Polling interval is set to 5 minutes as fews API have limitations for API calls
+
 ## Environment Variables
 
-Ensure that any environment variables required by your Next.js application are specified in the `.env` file and replace `<your_key>` with your API Key for that platform
+Ensure that the following environment variables are specified in the `.env` file, use links below to create key for that platform
+
+- `VITE_NYT_KEY` can be created from https://developer.nytimes.com/get-started
+- `VITE_NEWSORG_KEY` can be created from https://newsapi.org/docs/get-started
+- `VITE_GUARDIAN_KEY` can be created from https://bonobo.capi.gutools.co.uk/register/developer
+
+Create a `.env` file in the root directory, paste the following and replace `<your_key>` with your API Key created from above
 
 ```
+VITE_NYT_KEY=<your_key>
 VITE_NEWSORG_KEY=<your_key>
 VITE_GUARDIAN_KEY=<your_key>
-VITE_NYT_KEY=<your_key>
 ```
+
+## Run on localhost:
+
+Nodejs and Git must be installed
+
+- [Install Nodejs](https://nodejs.org/en/download/package-manager)
+- [Install Git](https://git-scm.com/downloads)
+
+Clone the repo or unzip in the directory, say `innoscripta-news-app`
+
+```bash
+git clone https://github.com/its4zahoor/innoscripta-news-app.git
+cd innoscripta-news-app
+
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
 ## Run in container
 
 To build and run your Docker container:
 
-```
+```bash
+git clone https://github.com/its4zahoor/innoscripta-news-app.git
+cd innoscripta-news-app
+
 docker build -t innoscripta-news-app .
 docker run -p 80:80 innoscripta-news-app
 ```
 
-## Run on localhost:
+Open your browser and go to http://localhost to view the application.
 
-Clone the repo or unzip in the directory say `innoscripta-news-app`
+# Dockerize the App
 
-```bash
-cd innoscripta-news-app
-npm install
-npm run dev
-```
+Docker and git must be installed on your machine.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Install Docker Engine](https://docs.docker.com/engine/install/)
+- [Install Git](https://git-scm.com/downloads)
 
-# Dockerizing the App
-
-## Prerequisites
-
-- Docker must be installed on your machine.
-
-## Building the Docker Image
+## Build the Docker Image
 
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:its4zahoor/innoscripta-innoscripta-news-app.git
-   cd innoscripta-innoscripta-news-app
+   git clone https://github.com/its4zahoor/innoscripta-news-app.git
+   cd innoscripta-news-app
    ```
 
 2. Build the Docker image:
@@ -51,17 +80,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    docker build -t innoscripta-news-app .
    ```
 
-## Running the Application in a Docker Container
+## Run in a Docker Container
 
 1. Start the container:
 
    ```bash
-   docker run -p 3000:3000 innoscripta-news-app
+   docker run -p 80:80 innoscripta-news-app
    ```
 
-2. Open your browser and go to `http://localhost:3000` to view the application.
+2. Open your browser and go to http://localhost to view the application.
 
-## Managing the Container
+## Manage the Container
 
 - **Stop the container:**
 
