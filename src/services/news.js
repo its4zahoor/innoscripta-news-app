@@ -42,20 +42,10 @@ export const getGuardianArticles = async (...args) => {
 export const getNYTArticles = async (...args) => {
   const apiKey = import.meta.env.VITE_NYT_KEY;
   const queryProp = nytQueryParams(...args);
-  const url = `https://api.nytimes.com/svc/${queryProp}&api-key=${apiKey}`;
+  const url = `https://api.nytimes.com/svc/search/v2/articlesearch.json?${queryProp}&api-key=${apiKey}`;
 
   try {
     const response = await axios.get(url);
-    if (url.includes("topstories")) {
-      return (response.data?.results || []).map((article) => ({
-        title: article.title,
-        publishedAt: article.published_date,
-        url: article.url,
-        description: article.abstract,
-        urlToImage: article.multimedia?.[0]?.url,
-      }));
-    }
-
     return (response.data?.response?.docs || []).map((article) => ({
       title: article.headline.main,
       publishedAt: article.pub_date,
@@ -90,8 +80,8 @@ export const getNewsSources = async (...args) => {
   const allNews = await Promise.all([
     getNYTArticles(args),
     getGuardianArticles(args),
-    // getBBCArticles(args),
-    // getNewsArticles(args),
+    getBBCArticles(args),
+    getNewsArticles(args),
   ]);
   return allNews.flat();
 };

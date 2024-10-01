@@ -1,3 +1,5 @@
+import { SOURCES_MAP, CATEGORIES_MAP } from "../constants";
+
 export const TODAY = new Date();
 export const WEEK_AGO = new Date();
 WEEK_AGO.setDate(WEEK_AGO.getDate() - 7);
@@ -10,10 +12,30 @@ export const getQuery = (options = {}) => {
   return params.join("&");
 };
 
-export const stringifyArray = (list = [], q = "cnn") => {
-  if (!list.length) return q;
+export const stringifyArray = (list = []) => {
+  const _list = list.filter(Boolean);
 
-  return list.join(",").toString();
+  if (!_list.length) return "";
+
+  return _list.join(",").toString();
+};
+
+export const fqTokens = (categories, sources) => {
+  const _categories = stringifyArray(
+    categories.map((category) => CATEGORIES_MAP[category])
+  );
+  const _sources = stringifyArray(sources.map((source) => SOURCES_MAP[source]));
+
+  const fq = [];
+  if (_categories) {
+    fq.push(`section_name:(${_categories})`);
+  }
+
+  if (_sources) {
+    fq.push(`source:(${_sources})`);
+  }
+
+  return fq.join(" AND ");
 };
 
 const [FROM] = WEEK_AGO.toISOString().split("T");
@@ -26,27 +48,22 @@ export const guardianQueryParams = ([q, preferences, filters]) => {
     q,
     "from-date": from || FROM,
     "to-date": to || TO,
-    pageSize: 10,
+    "page-size": 20,
     section: stringifyArray(categories.concat(category)),
-    "production-office": stringifyArray(sources.concat(source)),
+    "production-office": stringifyArray(sources.concat(source), "cnn"),
   });
 };
 
 export const nytQueryParams = ([q, preferences, filters]) => {
   const { categories, sources } = preferences;
   const { category, source, from, to } = filters;
-  if (!category && categories.length > 0) {
-    return `topstories/v2/${categories[0]}.json?`;
-  }
 
-  const query = getQuery({
-    begin_date: from || FROM,
-    end_date: to || TO,
-    q: stringifyArray(categories.concat(category), q),
-    sources: stringifyArray(sources.concat(source)),
+  return getQuery({
+    q,
+    begin_date: (from || FROM).replace(/-/g, ""),
+    end_date: (to || TO).replace(/-/g, ""),
+    fq: fqTokens(categories.concat(category), sources.concat(source)),
   });
-
-  return `search/v2/articlesearch.json?${query}`;
 };
 
 export const newsOrgQueryParams = ([q, preferences, filters]) => {
@@ -56,8 +73,8 @@ export const newsOrgQueryParams = ([q, preferences, filters]) => {
   return getQuery({
     from: from || FROM,
     to: to || TO,
-    q: q || "ai",
-    category: stringifyArray(categories.concat(category)),
+    sortBy: "popularity",
+    q: stringifyArray(categories.concat(category, q)) || "ai",
     sources: stringifyArray(sources.concat(source)),
   });
 };

@@ -2,27 +2,42 @@ import { useState, useEffect } from "react";
 import { getNewsSources } from "../services/news";
 import useNewsContext from "./useNewsContext";
 
-const useApi = (query) => {
-  const [data, setData] = useState([]);
+const useNewsAPI = (query, pollingInterval = 300000) => {
+  const [data, setData] = useState(null);
   const { preferences, filters } = useNewsContext();
-  const _filterStr = JSON.stringify(filters);
-  const _prefStr = JSON.stringify(preferences);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchNews = async () => {
       try {
-        const data = await getNewsSources(query, preferences, filters);
-        data.sort((a, b) => b.description.length - a.description.length);
-        setData(data);
+        const fetchedData = await getNewsSources(query, preferences, filters);
+        // News with the longest description will be shown as "News of the day"
+        fetchedData.sort((a, b) => b.description.length - a.description.length);
+        if (isMounted) {
+          setData(fetchedData);
+        }
       } catch (error) {
         console.error("Error fetching news:", error);
-        return [];
+        if (isMounted) {
+          setData([]);
+        }
       }
     };
+
     fetchNews();
-  }, [query, _filterStr, _prefStr]);
+
+    const interval = setInterval(() => {
+      fetchNews();
+    }, pollingInterval);
+
+    return () => {
+      clearInterval(interval);
+      isMounted = false;
+    };
+  }, [query, filters, preferences, pollingInterval]);
 
   return [data];
 };
 
-export default useApi;
+export default useNewsAPI;

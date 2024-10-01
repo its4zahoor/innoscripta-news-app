@@ -8,7 +8,7 @@ export default function Feed({ query }) {
     return <Skeleton />;
   }
 
-  const [firstNews, ...restNews] = data;
+  const [newsOfDay, ...restNews] = data;
 
   return (
     <div className="py-5 container max-w-[1200px] mx-auto">
@@ -17,7 +17,7 @@ export default function Feed({ query }) {
           <div className="relative overflow-hidden rounded-lg">
             <img
               src={
-                firstNews?.urlToImage || "https://picsum.photos/id/12/800/420"
+                newsOfDay?.urlToImage || "https://picsum.photos/id/12/800/420"
               }
               className="w-full min-h-[400px] object-cover"
               alt="Top News"
@@ -32,9 +32,9 @@ export default function Feed({ query }) {
           <span className="inline-block bg-red-500 text-white px-3 py-1 rounded mb-3 shadow">
             News of the day
           </span>
-          <h4 className="text-2xl font-bold mb-3">{firstNews?.title}</h4>
-          <p className="text-gray-600 mb-4">{firstNews?.description}</p>
-          <a href={firstNews.url} target="_blank" rel="noreferrer">
+          <h4 className="text-2xl font-bold mb-3">{newsOfDay?.title}</h4>
+          <p className="text-gray-600 mb-4">{newsOfDay?.description}</p>
+          <a href={newsOfDay.url} target="_blank" rel="noreferrer">
             <button className="bg-blue-500 text-white px-4 py-2 rounded shadow">
               Read More
             </button>
