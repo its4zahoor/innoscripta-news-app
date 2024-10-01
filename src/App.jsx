@@ -22,7 +22,7 @@ function App() {
   return (
     <>
       <Header />
-      <div className="container max-w-[1200px] mx-auto flex flex-col">
+      <div className="container max-w-[1200px] mx-auto flex flex-col p-3">
         <div className="flex w-full py-4 mt-[100px] items-stretch h-[90px] gap-4">
           <SearchBar onChange={handleSearch} />
           <TuningButton onClick={handleToggle} />

@@ -12,11 +12,11 @@ const Filters = () => {
 
   return (
     <div>
-      <div className="flex gap-4 justify-between items-center">
-        <div className="flex items-center">
+      <div className="flex flex-wrap lg:flex-nowrap gap-4 space-evenly items-center">
+        <div className="flex flex-col md:flex-row justify-center items-center w-full">
           <label
             htmlFor="category"
-            className="text-sm font-medium text-gray-700 mr-3"
+            className="text-sm w-full md:w-auto font-medium text-gray-700 mr-3"
           >
             Category
           </label>
@@ -28,10 +28,10 @@ const Filters = () => {
           />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex flex-col md:flex-row justify-center md:items-center w-full">
           <label
             htmlFor="source"
-            className="text-sm font-medium text-gray-700 mr-3"
+            className="text-sm font-medium text-gray-700 md:mr-3"
           >
             Source
           </label>
@@ -43,7 +43,7 @@ const Filters = () => {
           />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center flex-wrap md:flex-nowrap w-full">
           <label
             htmlFor="dateFrom"
             className="text-sm font-medium text-gray-700 mr-3"
