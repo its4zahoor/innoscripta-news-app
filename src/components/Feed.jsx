@@ -2,10 +2,10 @@ import Skeleton from "./Skeleton";
 import useNewsAPI from "../hooks/useNewsAPI";
 
 export default function Feed({ query }) {
-  const [data] = useNewsAPI(query || "ai");
+  const [data] = useNewsAPI(query);
 
-  if (!data.length) {
-    return <Skeleton />;
+  if (!data?.length) {
+    return <Skeleton isLoading={!data} />;
   }
 
   const [newsOfDay, ...restNews] = data;
@@ -16,9 +16,7 @@ export default function Feed({ query }) {
         <div className="md:w-1/2 w-full">
           <div className="relative overflow-hidden rounded-lg">
             <img
-              src={
-                newsOfDay?.urlToImage || "https://picsum.photos/id/12/800/420"
-              }
+              src={newsOfDay?.urlToImage || "https://placehold.co/800x420"}
               className="w-full min-h-[400px] object-cover"
               alt="Top News"
             />
@@ -47,9 +45,7 @@ export default function Feed({ query }) {
           <div key={article.title} className="bg-white p-3 rounded-lg h-full">
             <div className="relative overflow-hidden rounded-lg mb-3">
               <img
-                src={
-                  article.urlToImage || "https://picsum.photos/id/13/200/100"
-                }
+                src={article.urlToImage || "https://placehold.co/200x100"}
                 className="w-full object-fit h-[200px] rounded shadow-lg"
                 alt={article.title}
               />
@@ -83,7 +79,7 @@ export default function Feed({ query }) {
           >
             <div className="w-1/4">
               <img
-                src={article.urlToImage || "https://picsum.photos/id/6/200"}
+                src={article.urlToImage || "https://placehold.co/200"}
                 className="w-full rounded shadow-lg h-[100px]"
                 alt={article.title}
               />

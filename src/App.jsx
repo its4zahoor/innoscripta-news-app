@@ -9,7 +9,6 @@ import Filters from "./components/Filters";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("Zahoor: ~ searchTerm:", searchTerm);
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {
